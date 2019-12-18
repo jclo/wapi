@@ -4,4 +4,4 @@
 
   * Initial commit,
   * First build,
-  * ...,
+  * Release.
