@@ -1,0 +1,112 @@
+<!-- Based on HTML5 boilerplate v{{html5:version}} -->
+<!doctype html>
+<html class="no-js" lang="">
+  <head>
+    <meta charset="utf-8">
+    <title>{{app:title}}</title>
+    <meta name="description" content="{{app:description}}">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="{{company:name}}" content="{{company:slogan}}" />
+    <meta name="copyright" content="{{company:copyright}}" />
+
+    <link rel="manifest" href="site.webmanifest">
+    <link rel="apple-touch-icon" href="icon.png">
+    <!-- Place favicon.ico in the root directory -->
+
+    <link rel="stylesheet" href="">
+    <meta name="theme-color" content="#fafafa">
+  </head>
+
+  <body>
+    <!--[if IE]>
+      <p class="browserupgrade">You are using an <strong>outdated and unsupported</strong> browser. Please <a href="https://browsehappy.com/">upgrade your browser</a> to benefit of all the features of this web App.</p>
+    <![endif]-->
+
+    <!-- Add your site or application content here -->
+    <!-- Container -->
+    <div id="app" class="container">
+      <!-- Everything will fit here: header, main section, footer -->
+      <h1>Login</h1>
+      <form>
+        Username:<br>
+        <input type="text" name="user"><br>
+        Password:<br>
+        <input type="password" name="password"><br>
+        <input type="submit" value="Submit"><br>
+      </form>
+      <p class="resp"></p>
+
+      <br>
+      <button type="button" class="logout">logout</button>
+      <p class="reslogout"></p>
+
+      <br>
+      <button type="button" class="version">getVersion</button>
+      <p class="resversion"></p>
+    </div><!-- /.container -->
+
+    <!-- Add your scripts here -->
+    <script src='https://code.jquery.com/jquery-3.3.1.min.js' integrity='sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=' crossorigin='anonymous'></script>
+    <script>
+      document.addEventListener('DOMContentLoaded', () => {
+        // Login
+        $('form').submit(function() {
+          var formdata = $(this).serialize();
+          $.ajax({
+            type: 'POST',
+            url: '/api/v1/auth/login',
+            data: formdata,
+            success: function(data, textStatus, jqXHR) {
+              console.log(data);
+              $('.resp').html(JSON.stringify(data));
+              $('.reslogout').html('');
+              $('.resversion').html('');
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+              console.log(jqXHR.responseJSON);
+              $('.resp').html(JSON.stringify(jqXHR.responseJSON));
+            }
+          });
+          return false;
+        });
+
+
+        // Logout:
+        $('.logout').on('click', function() {
+          $.ajax({
+            type: 'GET',
+            url: '/api/v1/auth/logout',
+            success: function(data, textStatus, jqXHR) {
+              console.log(data);
+              $('.reslogout').html(JSON.stringify(data));
+              $('.resp').html('');
+              $('.resversion').html('');
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+              console.log(jqXHR.responseJSON);
+              $('.reslogout').html(JSON.stringify(jqXHR.responseJSON));
+            }
+          });
+        });
+
+
+        // Ask to return the release number:
+        $('.version').on('click', function() {
+          $.ajax({
+            type: 'GET',
+            url: '/api/v1/system/getversion',
+            success: function(data, textStatus, jqXHR) {
+              console.log(data);
+              $('.resversion').html(JSON.stringify(data));
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+              console.log(jqXHR.responseJSON);
+              $('.resversion').html(JSON.stringify(jqXHR.responseJSON));
+            }
+          });
+        });        
+      });
+    </script>
+    <!-- Google Analytics: change UA-XXXXX-Y to be your site's ID. -->
+  </body>
+</html>
