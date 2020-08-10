@@ -1,6 +1,6 @@
 {
   "name": "@mobilabs/wapi",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "A light Node.JS API Server Framework",
   "main": "index.js",
   "bin": {
@@ -31,30 +31,30 @@
   },
   "homepage": "https://github.com/jclo/wapi",
   "dependencies": {
-    "@mobilabs/kzlog": "0.0.3",
-    "@mobilabs/overslash": "^1.0.0",
+    "@mobilabs/kzlog": "0.0.7",
+    "@mobilabs/overslash": "^1.0.4",
     "basic-auth": "^2.0.1",
     "body-parser": "^1.19.0",
-    "cookie-parser": "^1.4.4",
+    "cookie-parser": "^1.4.5",
     "express": "^4.17.1",
-    "express-session": "^1.17.0",
-    "nopt": "^4.0.1",
+    "express-session": "^1.17.1",
+    "nopt": "^4.0.3",
     "picodb": "^0.12.1",
-    "shelljs": "^0.8.3"
+    "shelljs": "^0.8.4"
   },
   "devDependencies": {
     "chai": "^4.2.0",
-    "coveralls": "^3.0.9",
-    "cross-env": "^6.0.3",
+    "coveralls": "^3.1.0",
+    "cross-env": "^7.0.2",
     "del": "^5.1.0",
-    "eslint": "^6.7.2",
-    "eslint-config-airbnb-base": "^14.0.0",
-    "eslint-plugin-import": "^2.18.2",
-    "husky": "^3.1.0",
-    "mocha": "^6.2.2",
-    "nyc": "^14.1.1",
+    "eslint": "^7.6.0",
+    "eslint-config-airbnb-base": "^14.2.0",
+    "eslint-plugin-import": "^2.22.0",
+    "husky": "^4.2.5",
+    "mocha": "^8.1.1",
+    "nyc": "^15.1.0",
     "opener": "^1.5.1",
-    "request": "^2.88.0"
+    "request": "^2.88.2"
   },
   "publishConfig": {
     "access": "public"

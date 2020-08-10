@@ -32,7 +32,7 @@
 const fs       = require('fs')
     , readline = require('readline')
     , PicoDB   = require('picodb')
-    , _        = require('@mobilabs/overslash')
+    , _        = require('@mobilabs/overslash/_dist/lib/overslash-full')
     ;
 
 

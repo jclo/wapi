@@ -3,5 +3,6 @@ __trash
 .nyc_output
 coverage
 node_modules
+_t.js
 
 server/ssl/*.pem
