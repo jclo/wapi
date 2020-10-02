@@ -4,7 +4,7 @@
 
   * Updated the project dependencies,
   * Fixed a regression on Wapi package contents,
-  * ...,
+  * Release.
 
 
 ### 0.0.1 (August 10, 2020)

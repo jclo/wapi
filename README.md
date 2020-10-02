@@ -11,44 +11,44 @@
 `Wapi` is a slim, fast and minimal API framework built on top of Express.JS. It is built to provide a flexible API consumable from other apps.
 
 
-## Build an Run
+## Quick Startup
 
-You can create an API Server from `Wapi` in a very few steps:
+You can easily get your first Wapi Server running in a couple of minutes by just typing a few command lines. But first, you need to create an empty folder. It will contain your project.
 
-  1. create a folder that contains your project,
+Then, you just need to create a `package.json` file that contains:
 
-  3. then, execute the following commands from a shell terminal:
-
-  ```bash
-  npm install wapi
-  ./node_modules/.bin/wapi create -n <name_of_your_app>
-  npm install
-  ```
-
-That's all!
-
-Your API server is almost ready to run. If you want to use `https` calls, you have to create your certificates and store them in `server/ssl`. Read the README.md to know how to create them.
-
-You can run it without `https` (for testing purpose only) by replacing in the file `server/config.js`:
-
-```javascript
-env: {
-  ...
-  https: true,
-  ...
+```json
+{
+  "name": "NameOfYourProject",
+  "scripts": {
+    "create": "npm install @mobilabs/wapi && npm run populate",
+    "populate": "wapi populate --name ${npm_package_name} --author \"${npm_package_writer_name}\" --acronym ${npm_package_writer_acronym} --email ${npm_package_writer_email} --url ${npm_package_writer_url} && npm install"
+  },
+  "writer": {
+    "name": "John Doe",
+    "acronym": "jdo",
+    "email": "jdo@johndoe.com",
+    "url": "http://www.johndoe.com/"
+  }
 }
 ```
+Replace `NameOfYourProject` by your project name and fill `writer` with your credentials.
 
-by:
-```javascript
-env: {
-  ...
-  https: false,
-  ...
-}
+And finally, type in the terminal:
+
+```bash
+npm run create.
 ```
 
-Now, start it by typing `npm run app`. you should get a list of messages telling that the server is running. If you want to observe transactions, you can open a second terminal and type `npm run test`.
+Your project is almost ready. As, Wapi relies on `https`, you have to add your certificates in the folder `server/ssl` or you can disable `https` (not recommended) in `server/config.js`.
+
+Now you can starts your server by typing:
+
+```bash
+npm run app
+```
+
+You should get a list of messages telling that the server is running. If you want to observe transactions, you can open a second terminal and type `npm run test`.
 
 
 ## Documentation
