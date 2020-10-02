@@ -20,7 +20,7 @@
 /* eslint one-var: 0, semi-style: 0, no-underscore-dangle: 0 */
 
 
-// -- Node Modules
+// -- Vendor Modules
 const auth = require('basic-auth')
     , KZlog = require('@mobilabs/kzlog')
     ;
@@ -32,13 +32,13 @@ const account = require('../../lib/account.js')
     ;
 
 
-// -- Local constants
+// -- Local Constants
 const { level } = config
     , log       = KZlog('core/http.js', level, false)
     ;
 
 
-// Local variables
+// -- Local Variables
 
 
 // -- Public Methods -----------------------------------------------------------

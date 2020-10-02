@@ -20,17 +20,18 @@
 /* eslint one-var: 0, semi-style: 0 */
 
 
-// -- Node Modules
+// -- Vendor Modules
 
 
 // -- Project Modules
 
 
-// -- Local constants
-const { version } = require('../../../package.json');
+// -- Local Constants
+const { version } = require('../../../package.json')
+    ;
 
 
-// Local variables
+// -- Local Variables
 
 
 // -- Public Methods -----------------------------------------------------------

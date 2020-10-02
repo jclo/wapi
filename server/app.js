@@ -19,8 +19,9 @@
 /* eslint one-var: 0, semi-style: 0 */
 
 
-// -- Node Modules
-const KZlog = require('@mobilabs/kzlog');
+// -- Vendor Modules
+const KZlog = require('@mobilabs/kzlog')
+    ;
 
 
 // -- Project Modules
@@ -30,13 +31,13 @@ const wapi    = require('./wapi')
     ;
 
 
-// -- Local constants
+// -- Local Constants
 const { level } = config
     , log       = KZlog('app.js', level, false)
     ;
 
 
-// -- Local variables
+// -- Local Variables
 
 
 // -- Main section -

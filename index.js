@@ -1,1 +1,1 @@
-module.exports = require('./server/core/wapi.js');
+module.exports = require('./server/core/wapi');

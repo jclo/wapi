@@ -1,10 +1,14 @@
 #!/usr/bin/env node
 /* *****************************************************************************
- * wapi.js creates an API Server.
+ * wapi.js creates the skeleton for writing ES6 Javascript libraries.
+ *
+ * Nota:
+ * wapi.js is a copy and paste of es6lib.js with a few minor changes
+ * (https://github.com/jclo/es6lib/blob/master/bin/es6lib.js).
  *
  * The MIT License (MIT)
  *
- * Copyright (c) 2020 jclo <jclo@mobilabs.fr> (http://www.mobilabs.fr)
+ * Copyright (c) 2020 Mobilabs <contact@mobilabs.fr> (http://www.mobilabs.fr)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -24,43 +28,57 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  * ************************************************************************** */
-/* eslint one-var: 0,semi-style: 0, no-underscore-dangle: 0 */
+/* eslint one-var: 0, semi-style: 0, no-underscore-dangle: 0 */
 
-// -- Node modules
-const fs           = require('fs')
-    , nopt         = require('nopt')
-    , path         = require('path')
-    , shell        = require('shelljs')
+
+// -- Vendor Modules
+const fs    = require('fs')
+    , nopt  = require('nopt')
+    , path  = require('path')
+    , shell = require('shelljs')
     ;
 
 
-// -- Local modules
-
-// -- Local constants
-const thisscript  = 'wapi'
+// -- Local Variables
+const defBoilerLib  = 'wapi'
     /* eslint-disable-next-line object-curly-newline */
-    , author = { name: 'John Doe', acronym: 'jdo', email: 'jdo@johndoe.com', url: 'http://www.johndoe.com' }
-    , copyright   = 'Copyright (c) 2019 {{author:name}} <{{author:email}}> ({{author:url}})'
+    , defAuthor   = { name: 'John Doe', acronym: 'jdo', email: 'jdo@johndoe.com', url: 'http://www.johndoe.com' }
+    , copyright   = `Copyright (c) ${new Date().getFullYear()} {{author:name}} <{{author:email}}> ({{author:url}})`
     , baseapp     = process.cwd()
-    , basemodel   = __dirname.replace('/bin', '')
+    , baseboiler  = __dirname.replace('/bin', '')
     , { version } = require('../package.json')
+    // , src         = 'src'
     , publicdir   = 'public'
     , serverdir   = 'server'
     , test        = 'test'
-    , tasks       = 'tasks'
+    // , tasks       = 'tasks'
+    , docs        = 'docs'
     // Command line Options
     , opts = {
       help: [Boolean, false],
       version: [String, null],
       path,
+      boilerlib: [String, null],
       name: [String, null],
+      author: [String, null],
+      acronym: [String, null],
+      email: [String, null],
+      url: [String, null],
     }
     , shortOpts = {
       h: ['--help'],
       v: ['--version', version],
+      p: ['--path'],
+      b: ['--boilerlib'],
+      n: ['--name'],
+      a: ['--author'],
+      c: ['--acronym'],
+      e: ['--email'],
+      u: ['--url'],
     }
     , parsed = nopt(opts, shortOpts, process.argv, 2)
     ;
+
 
 // -- Templates
 const readme = [
@@ -102,19 +120,37 @@ const license = [
 const changelog = [
   '### HEAD',
   '',
+  '',
   '### 0.0.0 (Month Day, Year)',
   '',
-  '  * Initial build.',
+  '  * Initial commit,',
+  '  * ...,',
   ''].join('\n');
 
-const gitignore = '';
-const eslintignore = '';
+const index = [
+  "module.exports = require('./lib/{{lib:lowname}}');",
+  ''].join('\n');
+
+const gitignore = [
+  '.DS_Store',
+  '',
+  '.nyc_output',
+  'coverage',
+  'node_modules',
+  ''].join('\n');
+
+const eslintignore = [
+  ''].join('\n');
+
+const npmignore = [
+  '*',
+  '!_public/**/*',
+  '!server/**/*',
+  '!test/**/*',
+  ''].join('\n');
 
 
-// -- Local variables
-
-
-// -- Private functions --------------------------------------------------------
+// -- Private Functions --------------------------------------------------------
 
 /**
  * Dispays the help message.
@@ -129,12 +165,18 @@ function _help() {
   const message = ['',
     'Usage: command [options]',
     '',
-    'create             creates the API Server',
+    'populate            populate the app',
     '',
     'Options:',
     '',
-    '-h, --help         output usage information',
-    '-v, --version      output the version number',
+    '-h, --help          output usage information',
+    '-v, --version       output the version number',
+    '-b, --boilerlib     the name of the boilerplate',
+    '-n, --name          the name of the app',
+    '-a, --author        the name of the author (ex. "John Doe")',
+    '-c, --acronym       the acronym of the author (ex. jdo)',
+    '-e, --email         the email address of the author (ex. jdo@johndoe.com)',
+    '-u, --url           the website of the author (ex. http://www.johndoe.com)',
     '',
   ].join('\n');
 
@@ -172,8 +214,8 @@ function _usage() {
  *
  * @function (arg1)
  * @private
- * @param {Array}     an array of files,
- * @returns {Array}   returns the filtered array,
+ * @param {Array}           an array of files,
+ * @returns {Array}         returns the filtered array,
  */
 function _filter(files) {
   const filtered = []
@@ -218,7 +260,9 @@ function _isFolderEmpty(folder) {
 function _addSkeleton(base, app, owner, cright) {
   const newFiles = [
     [readme, license, changelog, gitignore, eslintignore],
-    ['README.md', 'LICENSE.md', 'CHANGELOG.md', '.gitignore', '.eslintignore'],
+    [
+      'README.md', 'LICENSE.md', 'CHANGELOG.md', '.gitignore', '.eslintignore',
+    ],
   ];
 
   let input;
@@ -249,7 +293,7 @@ function _addSkeleton(base, app, owner, cright) {
  * @returns {}              -,
  */
 function _duplicate(source, dest) {
-  const dupFiles = ['.eslintrc', '.travis.yml', 'gulpfile.js'];
+  const dupFiles = ['.eslintrc', '.travis.yml'/* , 'gulpfile.js' */];
 
   for (let i = 0; i < dupFiles.length; i++) {
     process.stdout.write(`  copied ${dupFiles[i]}\n`);
@@ -260,14 +304,15 @@ function _duplicate(source, dest) {
 /**
  * Customizes 'Package.json'.
  *
- * @function (arg1, arg2, arg3, arg4)
+ * @function (arg1, arg2, arg3, arg4, arg5)
  * @private
  * @param {String}          the source path,
  * @param {String}          the destination path,
  * @param {Object}          the author credentials,
+ * @param {String}          the name of the boilerplate,
  * @returns {}              -,
  */
-function _customize(source, dest, app, owner) {
+function _customize(source, dest, app, owner, boilerlib) {
   const npm = 'package.json';
 
   const json = shell.cat(`${source}/${npm}`);
@@ -275,11 +320,19 @@ function _customize(source, dest, app, owner) {
 
   const pack = {};
   pack.name = app.toLowerCase();
-  pack.version = '0.0.0';
+  pack.version = '0.0.0-alpha.0';
   pack.description = `${app} ...`;
   pack.main = '';
   pack.bin = {};
-  pack.scripts = obj.scripts;
+  pack.scripts = {
+    app: obj.scripts.app,
+    test: obj.scripts.test,
+    'display-coverage': obj.scripts['display-coverage'],
+    'check-coverage': obj.scripts['check-coverage'],
+    'report-coverage': obj.scripts['report-coverage'],
+    report: obj.scripts.report,
+    doc: obj.scripts.doc,
+  };
   pack.repository = obj.repository;
   pack.repository.url = `https://github.com/${owner.acronym}/${app.toLowerCase()}.git`;
   pack.keywords = [];
@@ -292,20 +345,51 @@ function _customize(source, dest, app, owner) {
   pack.bugs.url = `https://github.com/${owner.acronym}/${app.toLowerCase()}/issues`;
   pack.homepage = `https://github.com/${owner.acronym}/${app.toLowerCase()}`;
   pack.dependencies = obj.dependencies;
-  pack.dependencies['@mobilabs/wapi'] = obj.version;
   pack.devDependencies = obj.devDependencies;
   pack.publishConfig = obj.publishConfig;
   pack.private = obj.private;
   pack.husky = obj.husky;
 
-  delete pack.scripts.makeprivate;
+  pack.dependencies[`@mobilabs/${boilerlib.toLocaleLowerCase()}`] = version;
+
   delete pack.dependencies.nopt;
-  delete pack.dependencies.path;
   delete pack.dependencies.shelljs;
 
   process.stdout.write(`  updated ${npm}\n`);
   json.stdout = JSON.stringify(pack, null, 2);
   json.to(`${baseapp}/${npm}`);
+}
+
+/**
+ * Adds the source files.
+ *
+ * @function (arg1, arg2, arg3, arg4, arg5)
+ * @private
+ * @param {String}          the source path,
+ * @param {String}          the destination path,
+ * @param {String}          the destination folder,
+ * @param {String}          the name of the app,
+ * @param {String}          the name of the boilerplate,
+ * @returns {}              -,
+ */
+function _addSrc(source, dest, folder, app, boilerlib) {
+  const exclude = [];
+
+  // Copy contents of source folder recursively to dest:
+  process.stdout.write(`  duplicated the contents of ${folder}\n`);
+  shell.mkdir('-p', `${dest}/${folder}`);
+  shell.cp('-r', `${source}/${folder}/*`, `${dest}/${folder}/.`);
+
+  for (let i = 0; i < exclude.length; i++) {
+    shell.rm('-f', `${dest}/${folder}/${exclude[i]}`);
+  }
+
+  // Replace the name 'boilerlib' by 'app' to dest:
+  const re = new RegExp(boilerlib, 'g');
+  const f = shell.find(`${dest}/${folder}`).filter((file) => file.match(/(\.js)|(_header)|(_footer)/));
+  for (let i = 0; i < f.length; i++) {
+    shell.sed('-i', re, app, f[i]);
+  }
 }
 
 /**
@@ -326,17 +410,22 @@ function _addPublic(source, dest, folder) {
 }
 
 /**
- * Adds the test files.
+ * Adds the task files.
  *
- * @function (arg1, arg2, arg3)
+ * @function (arg1, arg2, arg3, arg4, arg5)
  * @private
  * @param {String}          the source path,
  * @param {String}          the destination path,
  * @param {String}          the destination folder,
+ * @param {String}          the App name,
+ * @param {String}          the name of the boilerplate,
  * @returns {}              -,
  */
-function _addTest(source, dest, folder) {
-  const exclude = [];
+function _addTasks(source, dest, folder, app, boilerlib) {
+  const exclude = []
+      , boiler  = '{{boiler:name}}'
+      , ver     = '{{boiler:name:version}}'
+      ;
 
   process.stdout.write(`  duplicated the contents of ${folder}\n`);
   shell.mkdir('-p', `${dest}/${folder}`);
@@ -345,6 +434,12 @@ function _addTest(source, dest, folder) {
   for (let i = 0; i < exclude.length; i++) {
     shell.rm('-f', `${dest}/${folder}/${exclude[i]}`);
   }
+
+  // Replace 'boilerlib' by 'app' to config.js and add the version
+  // of the boilerplate:
+  shell.sed('-i', boilerlib, app, `${dest}/${folder}/config.js`);
+  shell.sed('-i', boiler, boilerlib, `${dest}/${folder}/config.js`);
+  shell.sed('-i', ver, version, `${dest}/${folder}/config.js`);
 }
 
 /**
@@ -382,16 +477,77 @@ function _addServer(source, dest, folder, app) {
 }
 
 /**
- * Creates the API Server.
+ * Adds the test files.
  *
- * @function ()
+ * @function (arg1, arg2, arg3, arg4, arg5)
  * @private
- * @param {}           -,
- * @returns {}         -,
- * @since 0.0.0
+ * @param {String}          the source path,
+ * @param {String}          the destination path,
+ * @param {String}          the destination folder,
+ * @param {String}          the name of the app,
+ * @param {String}          the name of the boilerplate,
+ * @returns {}              -,
  */
-function _create(options) {
-  const app = options.name || 'myApp';
+function _addTest(source, dest, folder, app, boilerlib) {
+  const exclude = [];
+
+  process.stdout.write(`  duplicated the contents of ${folder}\n`);
+  shell.mkdir('-p', `${dest}/${folder}`);
+  shell.cp('-r', `${source}/${folder}/*`, `${dest}/${folder}/.`);
+
+  for (let i = 0; i < exclude.length; i++) {
+    shell.rm('-f', `${dest}/${folder}/${exclude[i]}`);
+  }
+
+  // Replace the name 'boilerlib' by 'app' to dest:
+  const re = new RegExp(boilerlib, 'g');
+  const f = shell.find(`${dest}/${folder}`).filter((file) => file.match(/\.js$/));
+  for (let i = 0; i < f.length; i++) {
+    shell.sed('-i', re, app, f[i]);
+  }
+}
+
+/**
+ * Creates and populates the web app.
+ *
+ * @function (arg1)
+ * @private
+ * @param {Object}    the command line options,
+ * @returns {}        -,
+ */
+function _populate(options) {
+  const boilerlib = options && options.boilerlib && options.boilerlib !== 'true'
+    ? options.boilerlib
+    : defBoilerLib;
+
+  const app = options && options.name && options.name !== 'true'
+    ? options.name
+    : 'myApp';
+
+  let author;
+  if (!options || (!options.author && !options.acronym && !options.email && !options.url)) {
+    author = defAuthor;
+  } else {
+    author = {
+      name: 'Unknown', acronym: 'undefined', email: 'undefined', url: 'undefined',
+    };
+  }
+
+  author.name = options && options.author && options.author !== 'true'
+    ? options.author
+    : author.name;
+
+  author.acronym = options && options.acronym && options.acronym !== 'true'
+    ? options.acronym
+    : author.acronym;
+
+  author.email = options && options.email && options.email !== 'true'
+    ? options.email
+    : author.email;
+
+  author.url = options && options.url && options.url !== 'true'
+    ? options.url
+    : author.url;
 
   const resp = _isFolderEmpty(baseapp);
   if (!resp) {
@@ -404,41 +560,43 @@ function _create(options) {
   _addSkeleton(baseapp, app, author, copyright);
 
   // Copy files:
-  _duplicate(basemodel, baseapp);
+  _duplicate(baseboiler, baseapp);
 
   // Add and customize package.json:
-  _customize(basemodel, baseapp, app, author);
+  _customize(baseboiler, baseapp, app, author, boilerlib);
+
+  // Copy the src files:
+  // _addSrc(baseboiler, baseapp, src, app, boilerlib);
 
   // Copy Public folder:
-  _addPublic(basemodel, baseapp, publicdir);
+  _addPublic(baseboiler, baseapp, publicdir);
 
   // Copy Server folder:
-  _addServer(basemodel, baseapp, serverdir, app);
+  _addServer(baseboiler, baseapp, serverdir, app);
 
   // Add tasks:
-  // none,
+  // _addTasks(baseboiler, baseapp, tasks, app, boilerlib);
 
   // Copy Test Files:
-  _addTest(basemodel, baseapp, test);
+  _addTest(baseboiler, baseapp, test, app, boilerlib);
 
+  // process.stdout.write('Done. Enjoy!\n');
   _usage();
-  //
 }
 
 
-// -- Where the script starts --------------------------------------------------
-
+// -- Main
 if (parsed.help) {
   _help();
 }
 
 if (parsed.version) {
-  process.stdout.write(`${thisscript} version: ${parsed.version}\n`);
+  process.stdout.write(`version: ${parsed.version}\n`);
   process.exit(0);
 }
 
-if (parsed.argv.remain[0] === 'create') {
-  _create(parsed);
+if (parsed.argv.remain[0] === 'populate') {
+  _populate(parsed);
 } else {
   _help();
 }

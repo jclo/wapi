@@ -21,7 +21,7 @@
 /* eslint one-var: 0, semi-style: 0 */
 
 
-// -- Node Modules
+// -- Vendor Modules
 
 
 // -- Project Modules
@@ -32,10 +32,10 @@ const load        = require('./load')
     ;
 
 
-// -- Local constants
+// -- Local Constants
 
 
-// Local variables
+// -- Local Variables
 
 
 // -- Public Methods -----------------------------------------------------------

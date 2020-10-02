@@ -19,16 +19,17 @@
  * ************************************************************************** */
 /* eslint global-require: 0, import/no-unresolved: 0 */
 
-// -- Node Modules
+
+// -- Vendor Modules
 
 
 // -- Project Modules
 
 
-// -- Local constants
+// -- Local Constants
 
 
-// -- Local variables
+// -- Local Variables
 let wapi;
 
 

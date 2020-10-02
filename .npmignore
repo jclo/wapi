@@ -1,0 +1,15 @@
+*
+!.eslintrc
+!.travis.yml
+
+!bin/**/*
+!public/**/*
+
+!server/api/**/*
+!server/auth/**/*
+!server/core/**/*
+!server/middlewares/**/*
+!server/ssl/README.md
+!server/*.js
+
+!test/**/*

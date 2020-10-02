@@ -21,8 +21,9 @@
 /* eslint one-var: 0, semi-style: 0 */
 
 
-// -- Node Modules
-const KZlog = require('@mobilabs/kzlog');
+// -- Vendor Modules
+const KZlog = require('@mobilabs/kzlog')
+    ;
 
 
 // -- Project Modules
@@ -31,13 +32,13 @@ const config  = require('../../config.js')
     ;
 
 
-// -- Local constants
+// -- Local Constants
 const { level } = config
     , log       = KZlog('controllers/auth.js', level, false)
     ;
 
 
-// Local variables
+// -- Local Variables
 
 
 // -- Public Methods -----------------------------------------------------------

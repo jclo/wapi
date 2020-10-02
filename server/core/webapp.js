@@ -20,7 +20,7 @@
 /* eslint one-var: 0, semi-style: 0, no-underscore-dangle: 0 */
 
 
-// -- Node Modules
+// -- Vendor Modules
 const express      = require('express')
     , bodyParser   = require('body-parser')
     , cookieParser = require('cookie-parser')
@@ -30,16 +30,17 @@ const express      = require('express')
 
 
 // -- Project Modules
-const configu = require('../config.js');
+const configu = require('../config.js')
+    ;
 
 
-// -- Local constants
+// -- Local Constants
 const { level } = configu
     , log       = KZlog('core/webapp.js', level, false)
     ;
 
 
-// Local variables
+// -- Local Variables
 
 
 // -- Private Functions --------------------------------------------------------

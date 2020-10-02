@@ -1,7 +1,8 @@
 /* global describe, it */
 /* eslint one-var: 0, semi-style: 0, no-unused-vars: 1 */
 
-// -- Node modules
+
+// -- Vendor Modules
 const should     = require('chai').should()
     , { expect } = require('chai')
     , request    = require('request')
@@ -9,13 +10,13 @@ const should     = require('chai').should()
     ;
 
 
-// -- Project modules
+// -- Project Modules
 const app = require('../server/app')
     , config = require('../server/config')
     ;
 
 
-// -- Local constants
+// -- Local Constants
 const api     = 'api/v1'
     , user    = 'jdo'
     , pass    = 'jdo'
@@ -27,7 +28,7 @@ const api     = 'api/v1'
     ;
 
 
-// -- Local variables
+// -- Local Variables
 let server
   , url
   ;

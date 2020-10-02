@@ -3,15 +3,16 @@
 /* global  */
 /* eslint one-var: 0, semi-style: 0, camelcase: 0, prefer-destructuring: 0 */
 
-// -- Node modules
+
+// -- Vendor Modules
 const request = require('request')
     ;
 
 
-// -- Project modules
+// -- Project Modules
 
 
-// -- Local constants
+// -- Local Constants
 const server   = 'https://localhost:1443'
     , api      = 'api/v1'
     , user     = 'jdo'
@@ -24,7 +25,7 @@ const server   = 'https://localhost:1443'
     ;
 
 
-// -- Local variables
+// -- Local Variables
 let url
   , resp
   , access_token

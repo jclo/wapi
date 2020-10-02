@@ -28,7 +28,7 @@
 /* eslint one-var: 0, semi-style: 0, no-underscore-dangle: 0 */
 
 
-// -- Node Modules
+// -- Vendor Modules
 const fs       = require('fs')
     , readline = require('readline')
     , PicoDB   = require('picodb')
@@ -39,14 +39,14 @@ const fs       = require('fs')
 // -- Project Modules
 
 
-// -- Local constants
+// -- Local Constants
 const accounts = './server/accounts/accounts.db'
     , db       = PicoDB()
     , docs     = []
     ;
 
 
-// -- Local variables
+// -- Local Variables
 
 
 // -- Private Functions --------------------------------------------------------

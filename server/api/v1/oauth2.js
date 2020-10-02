@@ -20,16 +20,16 @@
 /* eslint one-var: 0, semi-style: 0  */
 
 
-// -- Node modules
+// -- Vendor Modules
 
 
-// -- Project modules
+// -- Project Modules
 
 
-// -- Local constants
+// -- Local Constants
 
 
-// -- Local variables
+// -- Local Variables
 
 
 // -- Public Methods -----------------------------------------------------------

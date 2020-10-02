@@ -11,7 +11,7 @@
 /* eslint one-var: 0, semi-style: 0 */
 
 
-// -- Node Modules
+// -- Vendor Modules
 const fs       = require('fs')
     , readline = require('readline')
     ;
@@ -20,12 +20,12 @@ const fs       = require('fs')
 // -- Project Modules
 
 
-// -- Local constants
+// -- Local Constants
 const dbfile = './accounts.db'
     ;
 
 
-// Local variables
+// -- Local Variables
 let user
   ;
 
