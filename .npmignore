@@ -5,10 +5,12 @@
 !bin/**/*
 !public/**/*
 
+!server/accounts/**/*
 !server/api/**/*
-!server/auth/**/*
+!server/components/**/*
+!server/controllers/**/*
 !server/core/**/*
-!server/middlewares/**/*
+!server/lib/**/*
 !server/ssl/README.md
 !server/*.js
 

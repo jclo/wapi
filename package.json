@@ -1,6 +1,6 @@
 {
   "name": "@mobilabs/wapi",
-  "version": "1.0.0-beta.1",
+  "version": "1.0.0-beta.2",
   "description": "A light Node.JS API Server Framework",
   "main": "index.js",
   "bin": {
